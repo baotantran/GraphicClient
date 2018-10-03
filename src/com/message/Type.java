@@ -1,8 +1,9 @@
 package com.message;
 
-public enum Type {
+public enum Type{
     FIRST,
-    ERROR,
     STATUS,
-    NORMAL
+    NORMAL,
+    TIME,
+    REQUEST
 }

@@ -2,12 +2,13 @@ package com.message;
 
 import java.io.Serializable;
 import com.message.Type;
+import javafx.scene.media.MediaPlayer.Status;
 
 public class Message implements Serializable {
     private static final long serialVersionUID = 0x0505;
     private String stringMessage;
     private double time = 0;
-    private String status;
+    private Status status;
     private String name;
     private Type type;
 
@@ -27,11 +28,11 @@ public class Message implements Serializable {
         return name;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 

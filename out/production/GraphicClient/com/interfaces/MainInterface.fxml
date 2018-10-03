@@ -51,7 +51,7 @@
         <MediaView fx:id="mediaView" fitHeight="300.0" fitWidth="500.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2">
             <children>
-                <JFXButton fx:id="playButton" onAction="#pressPlayButton" text="&gt;" />
+                <JFXButton fx:id="playButton" onAction="#playMedia" text="&gt;" />
                 <JFXSlider fx:id="timeSlider" HBox.hgrow="ALWAYS" />
             </children>
         </HBox>

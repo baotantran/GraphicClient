@@ -14,7 +14,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="GraphicClient" options="--add-modules=javafx.graphics,javafx.fxml,javafx.controls,javafx.media" />
+      <module name="GraphicClient" options="--add-modules=javafx.graphics,javafx.fxml,javafx.controls,javafx.media,javafx.base" />
     </option>
   </component>
 </project>

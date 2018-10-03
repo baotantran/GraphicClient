@@ -3,7 +3,8 @@ package com.client;
 import com.controller.Controller;
 import com.message.Message;
 import com.message.Type;
-
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaPlayer.Status;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -51,8 +52,8 @@ public class Client implements Runnable{
         try {
             outMessage = new ObjectOutputStream(connection.getOutputStream());
             inMessage = new ObjectInputStream(connection.getInputStream());
-            controller.showNotification("Stream setup successfully \n");
             sendInitial(outMessage);
+            controller.showNotification("Stream setup successfully \n");
             while (!connection.isClosed()) {
                 Message message = (Message) inMessage.readObject();
                 if(message.getStringMessage().equalsIgnoreCase("end")) {
@@ -60,13 +61,56 @@ public class Client implements Runnable{
                     controller.showNotification("end from server");
                     break;
                 }
-                controller.showInMessage(message);
+                interpreter(message);
             }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    private void interpreter(Message message) {
+        Type type = message.getType();
+        switch (type) {
+            case NORMAL:
+                controller.showInMessage(message);
+                break;
+            case STATUS:
+                Status status = message.getStatus();
+                if(!controller.playerExist && (status == Status.READY
+                        || status == Status.PLAYING
+                        || status == Status.PAUSED)) {
+                    prepareMedia();
+                }
+                break;
+            case TIME:
+                if(controller.playerExist) {
+                    updateMediaTime(message.getTime());
+                    System.out.println("update time");
+                }
+                break;
+        }
+    }
+
+    public static void sendTimeRequest(){
+        if(controller.playerExist) {
+            Message message = new Message();
+            message.setType(Type.REQUEST);
+            message.setStatus(controller.player.getStatus());
+            message.setStringMessage("Request Server player current time");
+            sendMessage(message);
+            System.out.println("Send time request");
+
+        }
+    }
+
+    public void prepareMedia() {
+        controller.setupMedia();
+    }
+
+    public void updateMediaTime(double time){
+        controller.updateMediaTime(time);
     }
 
     public static void closeConnection() {
