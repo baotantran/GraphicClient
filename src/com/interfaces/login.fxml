@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.controller.loginController">
@@ -13,11 +15,39 @@
                 <Font size="18.0" />
             </font>
         </Label>
-        <HBox layoutX="50.0" layoutY="100.0" prefHeight="25.0" prefWidth="200.0">
-            <children>
-                <Label prefHeight="25.0" prefWidth="40.0" text="Name:" />
-                <JFXTextField fx:id="clientName" onAction="#login" HBox.hgrow="SOMETIMES" />
-            </children>
-        </HBox>
+      <VBox layoutX="49.0" layoutY="86.0" prefHeight="100.0" prefWidth="203.0">
+         <children>
+              <HBox prefHeight="25.0" prefWidth="200.0">
+                  <children>
+                      <Label prefHeight="25.0" prefWidth="110.0" text="Client Name:" />
+                      <JFXTextField fx:id="clientName" onAction="#login" promptText="Admin" HBox.hgrow="SOMETIMES">
+                     <padding>
+                        <Insets bottom="-0.1" />
+                     </padding>
+                  </JFXTextField>
+                  </children>
+              </HBox>
+            <HBox prefHeight="25.0" prefWidth="200.0">
+               <children>
+                  <Label prefHeight="25.0" prefWidth="110.0" text="Server Address:" />
+                  <JFXTextField fx:id="serverAddress" onAction="#login" promptText="127.0.0.1" HBox.hgrow="SOMETIMES">
+                     <padding>
+                        <Insets bottom="-0.1" />
+                     </padding>
+                  </JFXTextField>
+               </children>
+            </HBox>
+            <HBox prefHeight="25.0" prefWidth="200.0">
+               <children>
+                  <Label prefHeight="25.0" prefWidth="110.0" text="Port Number:" />
+                  <JFXTextField fx:id="portNumber" onAction="#login" promptText="5678" HBox.hgrow="SOMETIMES">
+                     <padding>
+                        <Insets bottom="-0.1" />
+                     </padding>
+                  </JFXTextField>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
     </children>
 </AnchorPane>

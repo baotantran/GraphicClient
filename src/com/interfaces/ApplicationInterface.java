@@ -14,7 +14,7 @@ public class ApplicationInterface extends Application {
     public void start(Stage primaryStage) throws Exception{
         stage = primaryStage;
         Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Synchronous Video Chat");
         primaryStage.setScene(new Scene(root, 300, 200));
         primaryStage.show();
     }

@@ -2,12 +2,10 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXSlider?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.Blend?>
-<?import javafx.scene.effect.Shadow?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -30,16 +28,9 @@
     </rowConstraints>
     <children>
         <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="176.0" prefWidth="597.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
-            <children>
-                <TextField fx:id="userIn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#sendStringMessage" prefHeight="25.0" prefWidth="422.0" promptText="Type here" HBox.hgrow="ALWAYS">
-                    <effect>
-                        <Blend mode="ADD">
-                            <topInput>
-                                <Shadow color="#234315" height="70.42" radius="36.3775" width="77.09" />
-                            </topInput>
-                        </Blend>
-                    </effect></TextField>
-            </children>
+         <children>
+            <JFXTextField fx:id="userIn" onAction="#sendStringMessage" prefHeight="25.0" prefWidth="500.0" promptText="Type here" />
+         </children>
         </HBox>
         <MenuBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="28.0" prefWidth="496.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
             <menus>
@@ -47,7 +38,6 @@
                 <Menu mnemonicParsing="false" text="Video" />
             </menus>
         </MenuBar>
-        <TextArea fx:id="textArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4" />
         <MediaView fx:id="mediaView" fitHeight="300.0" fitWidth="500.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2">
             <children>
@@ -55,6 +45,10 @@
                 <JFXSlider fx:id="timeSlider" HBox.hgrow="ALWAYS" />
             </children>
         </HBox>
-        <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+        <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3">
+         <children>
+            <JFXTextField fx:id="linkField" onAction="#sendLinkToServer" prefWidth="500.0" promptText="Send link to server" />
+         </children></HBox>
+      <JFXTextArea fx:id="textArea" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4" />
     </children>
 </GridPane>

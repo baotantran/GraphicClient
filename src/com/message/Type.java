@@ -5,5 +5,8 @@ public enum Type{
     STATUS,
     NORMAL,
     TIME,
-    REQUEST
+    REQUEST,
+    COMMAND,
+    LINK,
+    TERMINATE
 }

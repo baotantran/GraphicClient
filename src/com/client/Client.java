@@ -56,11 +56,6 @@ public class Client implements Runnable{
             controller.showNotification("Stream setup successfully \n");
             while (!connection.isClosed()) {
                 Message message = (Message) inMessage.readObject();
-                if(message.getStringMessage().equalsIgnoreCase("end")) {
-                    closeConnection();
-                    controller.showNotification("end from server");
-                    break;
-                }
                 interpreter(message);
             }
         } catch (IOException e) {
@@ -77,19 +72,28 @@ public class Client implements Runnable{
                 controller.showInMessage(message);
                 break;
             case STATUS:
-                Status status = message.getStatus();
-                if(!controller.playerExist && (status == Status.READY
-                        || status == Status.PLAYING
-                        || status == Status.PAUSED)) {
-                    prepareMedia();
-                }
+                prepareMedia(message);
                 break;
             case TIME:
-                if(controller.playerExist) {
-                    updateMediaTime(message.getTime());
-                    System.out.println("update time");
-                }
+                updateMediaTime(message);
                 break;
+            case COMMAND:
+                followCommand(message);
+                break;
+            case TERMINATE:
+                closeConnection();
+                controller.showNotification("end from server");
+                break;
+        }
+    }
+
+    private void followCommand(Message message) {
+        if(controller.playerExist) {
+            String command = message.getStringMessage();
+            Status status = controller.player.getStatus();
+            System.out.println(command);
+            if(command.equalsIgnoreCase("play") && status != Status.PLAYING) controller.playMedia();
+            else if(command.equalsIgnoreCase("paused") && status != Status.PAUSED) controller.playMedia();
         }
     }
 
@@ -105,12 +109,20 @@ public class Client implements Runnable{
         }
     }
 
-    public void prepareMedia() {
-        controller.setupMedia();
+    public void prepareMedia(Message message) {
+        Status status = message.getStatus();
+        if(status == Status.READY
+                || status == Status.PLAYING
+                || status == Status.PAUSED) {
+            controller.setupMedia(message.getStringMessage());
+        }
     }
 
-    public void updateMediaTime(double time){
-        controller.updateMediaTime(time);
+    public void updateMediaTime(Message message){
+        if(controller.playerExist) {
+            controller.updateMediaTime(message.getTime());
+            System.out.println("update time");
+        }
     }
 
     public static void closeConnection() {

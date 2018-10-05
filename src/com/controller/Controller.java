@@ -3,6 +3,8 @@ package com.controller;
 import com.client.Client;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSlider;
+import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXTextField;
 import com.message.Message;
 import com.message.Type;
 import javafx.application.Platform;
@@ -24,15 +26,17 @@ import static com.client.Client.sendMessage;
 public class Controller {
 
     @FXML
-    private TextField userIn;
+    private JFXTextField userIn;
     @FXML
-    private TextArea textArea;
+    private JFXTextArea textArea;
     @FXML
     private JFXSlider timeSlider;
     @FXML
     private MediaView mediaView;
     @FXML
     private JFXButton playButton;
+    @FXML
+    private JFXTextField linkField;
 
     public static MediaPlayer player;
     public static Status status;
@@ -73,22 +77,41 @@ public class Controller {
 
     // Send simple string message
     public void sendStringMessage(){
+        Message message = new Message();
+        String text = userIn.getText();
+        if(text.equalsIgnoreCase("end")) {
+            message.setType(Type.TERMINATE);
+            message.setStringMessage("end");
+        } else {
+            message.setType(Type.NORMAL);
+            message.setStringMessage(Client.clientName + ": " + text);
+        }
+        sendMessage(message);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 userIn.setText("");
             }
         });
-        Message message = new Message();
-        message.setType(Type.NORMAL);
-        String text = userIn.getText();
-        message.setStringMessage(Client.clientName + ": " + userIn.getText());
-        sendMessage(message);
     }
 
-    public void setupMedia() {
+    @FXML
+    private void sendLinkToServer() {
+        Message message = new Message();
+        message.setType(Type.LINK);
+        message.setStringMessage(linkField.getText());
+        sendMessage(message);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                linkField.setText("");
+            }
+        });
+    }
+
+    public void setupMedia(String link) {
         playerExist = true;
-        Media media = new Media("http://www.html5videoplayer.net/videos/toystory.mp4");
+        Media media = new Media(link);
         player = new MediaPlayer(media);
         player.setAutoPlay(false);
         setup();
@@ -167,7 +190,7 @@ public class Controller {
         }
     }
 
-    public static void updateMediaTime(double time) {
+    public void updateMediaTime(double time) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -176,7 +199,6 @@ public class Controller {
                 }
             }
         });
-
     }
 
 
