@@ -10,11 +10,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Client implements Runnable{
     private static Socket connection;
     private static ObjectInputStream inMessage;
-    private static ObjectOutputStream outMessage;
+    private static OutStream outMessage;
     private static Controller controller;
     public static String clientName;
 
@@ -32,27 +36,32 @@ public class Client implements Runnable{
 
     // Send Client message
     public static void sendMessage(Message message) {
-        try {
-            outMessage.writeObject(message);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        outMessage.send(message);
     }
 
     // Send initial message contain type and name of client
-    public static void sendInitial(ObjectOutputStream output) throws IOException{
+    public static void sendInitial() throws IOException{
         Message first = new Message();
         first.setType(Type.FIRST);
         first.setName(clientName);
-        output.writeObject(first);
+        sendMessage(first);
+    }
+
+    public static void sendUpdateTime(double time) {
+        Message message = new Message();
+        message.setStatus(controller.player.getStatus());
+        message.setType(Type.TIME);
+        message.setStringMessage("Client Time");
+        message.setTime(time);
+        sendMessage(message);
     }
 
     @Override
     public void run(){
         try {
-            outMessage = new ObjectOutputStream(connection.getOutputStream());
+            outMessage = new OutStream(new ObjectOutputStream(connection.getOutputStream()));
             inMessage = new ObjectInputStream(connection.getInputStream());
-            sendInitial(outMessage);
+            sendInitial();
             controller.showNotification("Stream setup successfully \n");
             while (!connection.isClosed()) {
                 Message message = (Message) inMessage.readObject();

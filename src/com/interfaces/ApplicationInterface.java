@@ -16,6 +16,7 @@ public class ApplicationInterface extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
         primaryStage.setTitle("Synchronous Video Chat");
         primaryStage.setScene(new Scene(root, 300, 200));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

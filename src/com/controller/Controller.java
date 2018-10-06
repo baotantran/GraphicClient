@@ -21,6 +21,11 @@ import javafx.scene.media.MediaPlayer.*;
 import javafx.scene.media.MediaView;
 import javafx.util.Duration;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import static com.client.Client.clientName;
 import static com.client.Client.sendMessage;
 
 public class Controller {
@@ -43,7 +48,6 @@ public class Controller {
     private static Duration duration;
     private Duration current;
     public static boolean playerExist = false;
-
 
     public void showNotification(final String note) {
         Platform.runLater(new Runnable() {
@@ -110,6 +114,9 @@ public class Controller {
     }
 
     public void setupMedia(String link) {
+        if(playerExist) {
+            player.dispose();
+        }
         playerExist = true;
         Media media = new Media(link);
         player = new MediaPlayer(media);
@@ -183,7 +190,9 @@ public class Controller {
                     } else if (!timeSlider.isDisable() &&
                             duration.greaterThan(Duration.ZERO) &&
                             timeSlider.isValueChanging()) {
-                        player.seek(new Duration(duration.toMillis() * timeSlider.getValue() / 100));
+                        double time = duration.toMillis() * timeSlider.getValue() / 100;
+                        player.seek(new Duration(time));
+                        Client.sendUpdateTime(time);
                     }
                 }
             });
