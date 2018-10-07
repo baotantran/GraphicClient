@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="GraphicClient:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/GraphicClient_jar</output-path>
+    <root id="archive" name="GraphicClient.jar">
+      <element id="module-output" name="GraphicClient" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../jfoenix-9.0.6.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
