@@ -39,6 +39,7 @@ public class loginController {
         Parent root = (Parent) fxmlLoader.load();
         Controller controller = fxmlLoader.getController();
         // pass address, port, controller and client name to client instance
+        System.out.println(address);
         Client client = new Client(address, port, controller, name);
         Thread t = new Thread(client);
         t.start();
@@ -66,7 +67,9 @@ public class loginController {
         }
         String tempAddress = serverAddress.getText();
         if(!tempAddress.equalsIgnoreCase("LocalHost") && tempAddress.length() > 0) {
-            String[] numb = tempAddress.split(".");
+            System.out.println(tempAddress);
+            String[] numb = tempAddress.split("\\.");
+            Arrays.stream(numb).forEach(n -> System.out.println(n));
             boolean flag = true;
             if(numb.length == 4) {
                 for (String n : numb) {
