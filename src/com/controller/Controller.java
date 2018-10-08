@@ -50,32 +50,23 @@ public class Controller {
     public static boolean playerExist = false;
 
     public void showNotification(final String note) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                textArea.appendText(note);
-            }
+        Platform.runLater(() -> {
+            textArea.appendText(note);
         });
     }
 
     // Show received message in text area
     public void showInMessage(final Message message) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                textArea.appendText(message.getStringMessage() + "\n");
-            }
+        Platform.runLater(() -> {
+            textArea.appendText(message.getStringMessage() + "\n");
         });
     }
 
     // Show message send to server
     public void showOutMessage(final Message message) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                textArea.appendText(message.getStringMessage() + "\n");
-                userIn.setText("");
-            }
+        Platform.runLater(() -> {
+            textArea.appendText(message.getStringMessage() + "\n");
+            userIn.setText("");
         });
     }
 
@@ -91,11 +82,8 @@ public class Controller {
             message.setStringMessage(Client.clientName + ": " + text);
         }
         sendMessage(message);
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                userIn.setText("");
-            }
+        Platform.runLater(() -> {
+            userIn.setText("");
         });
     }
 
@@ -105,11 +93,8 @@ public class Controller {
         message.setType(Type.LINK);
         message.setStringMessage(linkField.getText());
         sendMessage(message);
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                linkField.setText("");
-            }
+        Platform.runLater(() -> {
+            linkField.setText("");
         });
     }
 
@@ -127,106 +112,79 @@ public class Controller {
 
     public void setup() {
         player.setAutoPlay(false);
-        player.setOnPlaying(new Runnable() {
-            @Override
-            public void run() {
-                status = Status.PLAYING;
-            }
+        player.setOnPlaying(() -> {
+            status = Status.PLAYING;
         });
 
-        player.setOnHalted(new Runnable() {
-            @Override
-            public void run() {
-                status = Status.HALTED;
-            }
+        player.setOnHalted(() -> {
+            status = Status.HALTED;
         });
 
-        player.setOnPaused(new Runnable() {
-            @Override
-            public void run() {
-                status = Status.PAUSED;
-            }
+        player.setOnPaused(() -> {
+            status = Status.PAUSED;
         });
 
-        player.currentTimeProperty().addListener(new InvalidationListener() {
-            @Override
-            public void invalidated(Observable observable) {
+        player.currentTimeProperty().addListener((observable) -> {
+            updateTime();
+        });
+
+        timeSlider.valueProperty().addListener((obser, oldValue, newValue) -> {
                 updateTime();
-            }
         });
 
-        timeSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                updateTime();
-            }
-        });
-
-        player.setOnReady(new Runnable() {
-            @Override
-            public void run() {
-                Message message = new Message();
-                message.setStringMessage("media is ready");
-                message.setStatus(Status.READY);
-                message.setType(Type.STATUS);
-                status = Status.READY;
-                sendMessage(message);
-                duration = player.getMedia().getDuration();
-            }
+        player.setOnReady(() -> {
+            Message message = new Message();
+            message.setStringMessage("media is ready");
+            message.setStatus(Status.READY);
+            message.setType(Type.STATUS);
+            status = Status.READY;
+            sendMessage(message);
+            duration = player.getMedia().getDuration();
         });
 
     }
 
     private void updateTime() {
         if(timeSlider != null) {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    current = player.getCurrentTime();
-                    if(!timeSlider.isDisable()
-                            && duration.greaterThan(Duration.ZERO)
-                            && !timeSlider.isValueChanging()) {
-                        timeSlider.setValue(current.divide(duration.toMillis()).toMillis() * 100);
-                    } else if (!timeSlider.isDisable() &&
-                            duration.greaterThan(Duration.ZERO) &&
-                            timeSlider.isValueChanging()) {
-                        double time = duration.toMillis() * timeSlider.getValue() / 100;
-                        player.seek(new Duration(time));
-                        Client.sendUpdateTime(time);
-                    }
+            Platform.runLater(() -> {
+                current = player.getCurrentTime();
+                if(!timeSlider.isDisable()
+                        && duration.greaterThan(Duration.ZERO)
+                        && !timeSlider.isValueChanging()) {
+                    timeSlider.setValue(current.divide(duration.toMillis()).toMillis() * 100);
+                } else if (!timeSlider.isDisable() &&
+                        duration.greaterThan(Duration.ZERO) &&
+                        timeSlider.isValueChanging()) {
+                    double time = duration.toMillis() * timeSlider.getValue() / 100;
+                    player.seek(new Duration(time));
+                    Client.sendUpdateTime(time);
                 }
             });
         }
     }
 
     public void updateMediaTime(double time) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                if(duration.greaterThan(Duration.ZERO)) {
-                    player.seek(new Duration(time));
-                }
+        Platform.runLater(() -> {
+            if(duration.greaterThan(Duration.ZERO)) {
+                player.seek(new Duration(time));
             }
         });
     }
 
 
     public void playMedia() {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                if(status == Status.HALTED || status == Status.UNKNOWN) {
-                    showNotification("Can't open video \n");
-                    return;
-                }
-                if(status == Status.READY || status == Status.PAUSED || status == Status.STOPPED) {
-                    player.play();
-                    playButton.setText("||");
-                    Client.sendTimeRequest();
-                } else {
-                    player.pause();
-                    playButton.setText(">");
-                }
+        Platform.runLater(() -> {
+            if(status == Status.HALTED || status == Status.UNKNOWN) {
+                showNotification("Can't open video \n");
+                return;
+            }
+            if(status == Status.READY || status == Status.PAUSED || status == Status.STOPPED) {
+                player.play();
+                playButton.setText("||");
+                Client.sendTimeRequest();
+            } else {
+                player.pause();
+                playButton.setText(">");
             }
         });
     }

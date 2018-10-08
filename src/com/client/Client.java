@@ -3,17 +3,12 @@ package com.client;
 import com.controller.Controller;
 import com.message.Message;
 import com.message.Type;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+
 
 public class Client implements Runnable{
     private static Socket connection;
@@ -40,7 +35,7 @@ public class Client implements Runnable{
     }
 
     // Send initial message contain type and name of client
-    public static void sendInitial() throws IOException{
+    public static void sendInitial() {
         Message first = new Message();
         first.setType(Type.FIRST);
         first.setName(clientName);

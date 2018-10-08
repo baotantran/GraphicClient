@@ -40,6 +40,7 @@ public class loginController {
         Controller controller = fxmlLoader.getController();
         // pass address, port, controller and client name to client instance
         System.out.println(address);
+        System.out.println(port);
         Client client = new Client(address, port, controller, name);
         Thread t = new Thread(client);
         t.start();
